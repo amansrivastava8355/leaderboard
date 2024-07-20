@@ -1,0 +1,195 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Leaderboard API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/leaderboard": {
+            "get": {
+                "tags": [
+                    "Leaderboard Avg Score"
+                ],
+                "summary": "Get leaderboard",
+                "operationId": "e2e02bc8d73f7e1a8dfceb1c40e0f3bd",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get a list of users",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "List of users"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "age": {
+                                        "type": "integer"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create a user."
+                    }
+                }
+            }
+        },
+        "/api/users/{user}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "d3a14968f8b7a072620c75c7c78ed6f8",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a user."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "e0f9a385a1d6788b99e519bd98cf7239",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete a user."
+                    }
+                }
+            }
+        },
+        "/api/users/{user}/points": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user points",
+                "description": "Increment or decrement user points based on the value provided. Positive values increment the points, while negative values decrement the points.",
+                "operationId": "d609c89e82076e0a189fe8017f5b3f3a",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ID of the user whose points are to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "points": {
+                                        "description": "The points to be added or subtracted. Positive values increment points, negative values decrement points.",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User points updated successfully."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    }
+                }
+            }
+        },
+        "/api/current-winner": {
+            "get": {
+                "tags": [
+                    "Winner"
+                ],
+                "summary": "Get current winner in every 5 minutes",
+                "operationId": "cb41071fd30ae14e859b074ccc814859",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "No winner declared yet"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Leaderboard Avg Score",
+            "description": "Leaderboard Avg Score"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        },
+        {
+            "name": "Winner",
+            "description": "Winner"
+        }
+    ]
+}

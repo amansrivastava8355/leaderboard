@@ -1,0 +1,80 @@
+# Use the official PHP image as the base image
+FROM php:8.2-apache
+
+# Set the working directory inside the container
+WORKDIR /var/www/html
+
+# Install dependencies
+ARG WWWGROUP
+ARG USER_ID
+
+
+RUN apt-get update && \
+    apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    supervisor \
+    redis \
+    libhiredis-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libssl-dev \
+    cron 
+    
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
+
+RUN curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer 
+# Install PHP extensions
+RUN if [ -z "$(pecl list | grep redis)" ]; then \
+    pecl install redis; \
+    docker-php-ext-enable redis; \
+fi
+
+RUN if [ -z "$(pecl list | grep mongodb)" ]; then \
+    pecl install mongodb; \
+    docker-php-ext-enable mongodb; \
+fi
+
+RUN docker-php-ext-configure gd --with-jpeg && \
+    docker-php-ext-install pdo_mysql zip gd 
+# Enable Apache Rewrite module
+RUN a2enmod rewrite
+
+# Set the Apache document root
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+
+# Copy the entrypoint script
+COPY docker/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
+COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+COPY docker/run-schedule /etc/cron.d/run-schedule
+
+# Set custom memory limit
+RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
+RUN service apache2 restart
+RUN chmod +x /usr/local/bin/docker-entrypoint
+
+# Add the cron job to the cron table
+RUN chmod 0644 /etc/cron.d/run-schedule
+
+# Apply cron job
+RUN crontab /etc/cron.d/run-schedule
+
+RUN touch /var/log/cron.log
+# RUN chown -R $USER_ID:www-data /var/www/html /var/run/apache2 /var/log/apache2
+# RUN usermod -u $USER_ID www-data
+# Check if the www-data group exists, and if not, create it
+ARG UID=1000
+ARG GID=1000
+RUN usermod -u $UID -o www-data && groupmod -g $GID -o www-data && \
+    chown -R www-data:www-data /var/www /var/www/html /var/run/apache2 /var/log/apache2
+
+COPY ../src /var/www/html
+# USER www-data
+# Expose port 80 for Apache
+EXPOSE 80
+# Set the entrypoint command
+ENTRYPOINT ["docker-entrypoint"]
