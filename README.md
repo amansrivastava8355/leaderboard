@@ -5,11 +5,12 @@ To fill the database with sample data, a factory is created. Run the following c
 php artisan db:seed
 ```
 
-Find the Swagger API documentation [here](http://16.171.54.171/api/documentation#/Leaderboard%20Avg%20Score).
+#### Find the Swagger API documentation [here](http://16.171.54.171/api/documentation#/Leaderboard%20Avg%20Score).
 
-A scheduled command runs every 5 minutes to declare the winner.
+#### A scheduled command runs every 5 minutes to declare the winner.
 
 ## Database
+
 
 - MongoDB is used as the database.
 
