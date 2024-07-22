@@ -32,3 +32,7 @@ To run the application locally, create a `.env` file and add the credentials for
 ```bash
 docker compose up -d
 ```
+
+## Structure of file
+- **/docker** - Contains Docker files and configurations.
+- **/src** - Laravel application for the leaderboard API.
