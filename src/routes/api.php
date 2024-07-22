@@ -19,10 +19,13 @@ use App\Http\Controllers\WinnerController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('users', [UserController::class, 'index']);
-Route::post('users', [UserController::class, 'store']);
-Route::get('users/{user}', [UserController::class, 'show']);
-Route::delete('users/{user}', [UserController::class, 'destroy']);
-Route::patch('users/{user}/points', [UserController::class, 'updatePoints']);
-Route::get('leaderboard', [LeaderboardController::class, 'index']);
-Route::get('current-winner', [WinnerController::class, 'show']);
+Route::middleware(['api_token'])->group(function () {
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::get('users/{user}', [UserController::class, 'show']);
+    Route::delete('users/{user}', [UserController::class, 'destroy']);
+    Route::patch('users/{user}/points', [UserController::class, 'updatePoints']);
+    Route::get('leaderboard', [LeaderboardController::class, 'index']);
+    Route::get('current-winner', [WinnerController::class, 'show']);
+});
+

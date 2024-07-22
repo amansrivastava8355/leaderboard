@@ -7,11 +7,20 @@ use App\Models\Winner;
 use Illuminate\Support\Facades\Storage;
 
 /**
-* @OA\Info(
-* title="Leaderboard API",
-* version="1.0.0",
-* )
-*/
+ * @OA\Info(
+ *     title="Leaderboard API",
+ *     version="1.0.0",
+ *     description="API documentation for the Leaderboard application"
+ * )
+ * 
+ * @OA\SecurityScheme(
+ *     securityScheme="apiToken",
+ *     type="apiKey",
+ *     in="header",
+ *     name="api-token",
+ *     description="API token to authorize requests"
+ * )
+ */
 class UserController extends Controller
 {
     /**
@@ -19,6 +28,7 @@ class UserController extends Controller
     * path="/api/users",
     * summary="Get a list of users",
     * tags={"Users"},
+    * security={{"apiToken":{}}},
     * @OA\Response(
     * response=200,
     * description="List of users",
@@ -33,6 +43,7 @@ class UserController extends Controller
     /**
      * @OA\Post(
      *     path="/api/users",
+     *     security={{"apiToken":{}}},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
@@ -74,6 +85,7 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *     path="/api/users/{user}",
+     *     security={{"apiToken":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
@@ -92,6 +104,7 @@ class UserController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/users/{user}",
+     *     security={{"apiToken":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
@@ -111,6 +124,7 @@ class UserController extends Controller
     /**
      * @OA\Patch(
      *     path="/api/users/{user}/points",
+     *     security={{"apiToken":{}}},
      *     summary="Update user points",
      *     description="Increment or decrement user points based on the value provided. Positive values increment the points, while negative values decrement the points.",
      *     @OA\Parameter(

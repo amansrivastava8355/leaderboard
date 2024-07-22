@@ -11,6 +11,7 @@ class WinnerController extends Controller
     /**
      * @OA\Get(
      *     path="/api/current-winner",
+     *     security={{"apiToken":{}}},
      *     summary="Get current winner in every 5 minutes",
      *     tags={"Winner"},
      *     @OA\Response(response=200, description="Successful operation"),

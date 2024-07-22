@@ -10,6 +10,7 @@ class LeaderboardController extends Controller
     /**
      * @OA\Get(
      *     path="/api/leaderboard",
+     *     security={{"apiToken":{}}},
      *     summary="Get leaderboard",
      *     @OA\Response(response=200, description="Successful operation"),
      *     tags={"Leaderboard Avg Score"},
